@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TGTC — BSC Token Lookup",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "description": "One-click on-chain data for BSC tokens: price, safety, smart money — right in your browser. X (Twitter) inline token evaluation + popup lookup. Powered by tgtcbot.com.",
   "action": {
     "default_popup": "popup.html",

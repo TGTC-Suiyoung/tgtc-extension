@@ -24,13 +24,13 @@
 </head>
 <body>
   <h1>⚡ TGTC — BSC Token Lookup</h1>
-  <div class="sub">X 推文中的合约，点一下即评估 · tgtcbot.com</div>
+  <div class="sub" id="sub">X 推文中的合约，点一下即评估 · tgtcbot.com</div>
 
-  <label>API Key（私聊 @TG_TC_BOT → 我的 API 获取）</label>
+  <label id="keyLabel">API Key（私聊 @TG_TC_BOT → 我的 API 获取）</label>
   <input id="key" type="password" placeholder="sk_live_..." autocomplete="off">
   <div id="status" class="status no">⚙️ 未填写 Key —— X 页面上 ⚡ 将不可用</div>
 
-  <div class="how">
+  <div class="how" id="how">
     <b>怎么用：</b><br>
     ① 填好上方 Key（自动保存）<br>
     ② 打开 <b>x.com</b> 刷推文<br>
@@ -39,8 +39,8 @@
   </div>
 
   <div class="link">
-    <a href="https://t.me/TG_TC_BOT" target="_blank">获取 Key →</a>
-    <a href="https://www.tgtcbot.com/tester.zh.html" target="_blank">更多端点 →</a>
+    <a id="linkGet" href="https://t.me/TG_TC_BOT" target="_blank">获取 Key →</a>
+    <a id="linkMore" href="https://www.tgtcbot.com/changelog.zh.html" target="_blank">更多端点 →</a>
   </div>
 
 <script src="popup.js"></script>
