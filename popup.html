@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+  :root{--bg:#0d1117;--line:#21262d;--fg:#e6edf3;--mut:#8b949e;--cyan:#22d3ee;--green:#3fb682}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{width:300px;background:var(--bg);color:var(--fg);font:16px/1.5 -apple-system,"Segoe UI",sans-serif;padding:16px}
+  h1{font-size:18px;font-weight:700;margin-bottom:2px}
+  .sub{color:var(--mut);font-size:14px;margin-bottom:14px}
+  label{display:block;color:var(--mut);font-size:14px;margin-bottom:5px}
+  input{
+    width:100%;background:#0a0d12;border:1px solid var(--line);border-radius:8px;
+    color:var(--fg);padding:8px 10px;font-size:15.5px;font-family:ui-monospace,Consolas,monospace
+  }
+  input:focus{outline:none;border-color:var(--cyan)}
+  .status{font-size:14px;margin-top:7px}
+  .ok{color:var(--green)}.no{color:var(--mut)}
+  .how{color:var(--mut);font-size:14.5px;margin-top:16px;line-height:1.7}
+  .how b{color:var(--fg)}
+  a{color:var(--cyan);text-decoration:none}
+  .link{margin-top:12px;font-size:14.5px;display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+  <h1>⚡ TGTC — BSC Token Lookup</h1>
+  <div class="sub">X 推文中的合约，点一下即评估 · tgtcbot.com</div>
+
+  <label>API Key（私聊 @TG_TC_BOT → 我的 API 获取）</label>
+  <input id="key" type="password" placeholder="sk_live_..." autocomplete="off">
+  <div id="status" class="status no">⚙️ 未填写 Key —— X 页面上 ⚡ 将不可用</div>
+
+  <div class="how">
+    <b>怎么用：</b><br>
+    ① 填好上方 Key（自动保存）<br>
+    ② 打开 <b>x.com</b> 刷推文<br>
+    ③ 带 BSC 合约的推文右上角出现 <b>⚡</b><br>
+    ④ 点一下 → 原地弹出评估卡片（价格 / 安全 / 聪明钱）
+  </div>
+
+  <div class="link">
+    <a href="https://t.me/TG_TC_BOT" target="_blank">获取 Key →</a>
+    <a href="https://www.tgtcbot.com/tester.zh.html" target="_blank">更多端点 →</a>
+  </div>
+
+<script src="popup.js"></script>
+</body>
+</html>
