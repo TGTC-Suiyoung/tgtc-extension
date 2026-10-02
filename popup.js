@@ -12,6 +12,9 @@ const T = {
     linkMore: "更多端点 →",
     ok: "✓ Key 已保存 —— X 页面上 ⚡ 已可用",
     no: "⚙️ 未填写 Key —— X 页面上 ⚡ 将不可用",
+    statScan: "📊 今日扫描 {n}",
+    statDanger: "🚨 命中危险 {n}",
+    board: "打开看板 →",
   },
   en: {
     sub: "BSC contracts in tweets, one click to evaluate · tgtcbot.com",
@@ -21,6 +24,9 @@ const T = {
     linkMore: "More endpoints →",
     ok: "✓ Key saved — ⚡ is ready on X",
     no: "⚙️ No key yet — ⚡ won't work on X",
+    statScan: "📊 Scanned today {n}",
+    statDanger: "🚨 Flagged {n}",
+    board: "Dashboard →",
   },
 }[LANG];
 
@@ -45,6 +51,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   $("linkMore").href = LANG === "zh"
     ? "https://www.tgtcbot.com/changelog.zh.html"
     : "https://www.tgtcbot.com/changelog.html";
+  // 今日扫描统计（本地计数：扫描 CA 数 / 命中危险数）+ 看板入口
+  try {
+    const { tgtc_scan_stats: st } = await chrome.storage.local.get(["tgtc_scan_stats"]);
+    const today = new Date().toISOString().slice(0, 10);
+    const cur = (st && st.date === today) ? st : { scanned: 0, danger: 0 };
+    $("statScan").textContent = T.statScan.replace("{n}", cur.scanned || 0);
+    $("statDanger").textContent = T.statDanger.replace("{n}", cur.danger || 0);
+    $("statBoard").textContent = T.board;
+  } catch (e) { /* 统计展示失败不影响主流程 */ }
   const { tgtc_key: key } = await chrome.storage.local.get(["tgtc_key"]);
   if (key) $("key").value = key;
   refreshStatus();
