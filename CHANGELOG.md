@@ -13,18 +13,18 @@ Update history for **TGTC — BSC Token Lookup**. All versions below are loaded 
   `Username renames` (count from the rename-history list), `Deleted tweets`, and
   `Tokens created`. Shown only when non-zero. Same data source as the TGTC Bot card.
 
-## v1.5.2 — 2026-10-03 · Popup card-based redesign
+## v1.5.2 — 2026-10-02 · Popup card-based redesign
 
 - Popup rebuilt from plain text into **card panels**: gradient brand header, Key panel,
   side-by-side **daily stats cards** (scanned / flagged, red for danger), usage steps
   with highlighted numbers, bottom links separated by a divider.
 
-## v1.5.1 — 2026-10-03 · Badge pill button
+## v1.5.1 — 2026-10-01 · Badge pill button
 
 - The ⚡ dot badge became a **pill button** ("⚡ Check CA" / "⚡ 查CA") — more visible
   on tweets while staying unobtrusive; hover scale 1.1.
 
-## v1.5.0 — 2026-10-03 · Four-state safety / multi-CA / copycat warning / quick card / popup stats
+## v1.5.0 — 2026-09-30 · Four-state safety / multi-CA / copycat warning / quick card / popup stats
 
 - **⚪ Unknown state (never default green).** Decision logic: count how many of the 4 key
   safety fields are present — `honeypot`, `mint_renounced`/`renounced`, `lp_burned_ratio`,
@@ -47,7 +47,7 @@ Update history for **TGTC — BSC Token Lookup**. All versions below are loaded 
   `chrome.storage`, resets daily, no account data collected) plus a **Dashboard** link
   back to tgtcbot.com.
 
-## v1.4.x — 2026-10-02 · i18n + icons
+## v1.4.x — 2026-09-29 · i18n + icons
 
 - Auto language (Chinese UI for `zh` browsers, English otherwise); extension icons
   (16/48/128); site links follow the browser language.
@@ -65,16 +65,16 @@ Update history for **TGTC — BSC Token Lookup**. All versions below are loaded 
 - 卡片详情新增 **官方号画像**：代币关联的官方推特展示**页面上看不到的历史痕迹**——
   改名次数（改名历史列表长度）/ 删帖数 / 发币数，有痕迹才显示。与 TGTC Bot 卡片同数据源。
 
-## v1.5.2（2026-10-03）· 弹窗卡片化改版
+## v1.5.2（2026-10-02）· 弹窗卡片化改版
 
 - 弹窗从纯文字堆叠重建成**卡片分区**：渐变品牌标题、Key 面板、并排**今日统计卡**
   （扫描数 / 命中危险，危险红显）、步骤序号高亮、底部链接分隔线。
 
-## v1.5.1（2026-10-03）· 徽章胶囊按钮
+## v1.5.1（2026-10-01）· 徽章胶囊按钮
 
 - ⚡ 圆点徽章改成**胶囊按钮**（「⚡ 查CA」）——推文上更明显但不抢眼，hover 放大 1.1。
 
-## v1.5.0（2026-10-03）· 四态评级 / 多 CA 切换 / 同名防错 / 轻卡视图 / 弹窗转化点
+## v1.5.0（2026-09-30）· 四态评级 / 多 CA 切换 / 同名防错 / 轻卡视图 / 弹窗转化点
 
 - **⚪ 未知态（不默认绿）**：判断逻辑——统计 4 个关键安全字段的已知数量：
   `honeypot`（蜜罐）、`mint_renounced`/`renounced`（Mint 是否放弃）、`lp_burned_ratio`（LP 烧毁比例）、
@@ -92,7 +92,7 @@ Update history for **TGTC — BSC Token Lookup**. All versions below are loaded 
 - **📊 弹窗转化点**：弹窗显示今日**扫描数**与**命中危险数**（本地 `chrome.storage` 计数，
   跨日自动重置，不收集任何账号信息）+「打开看板」入口（引流 tgtcbot.com）。
 
-## v1.4.x（2026-10-02）· 中英双语 + 图标
+## v1.4.x（2026-09-29）· 中英双语 + 图标
 
 - 界面自动跟随浏览器语言（中文环境中文、其他英文）；新增扩展图标（16/48/128）；
   站点链接按语言自动切换（中文/英文页）。
