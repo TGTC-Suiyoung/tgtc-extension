@@ -9,18 +9,20 @@
   const T = {
     zh: {
       badgeTitle: "TGTC 评估（BSC 链上数据）",
-      badgeText: "CA数据",
+      badgeText: "⚡ CA数据",
       sentimentBtn: "🧵 CA舆情",
+      sentTitle: "TGTC CA舆情",
       sentimentTitle: "CA 舆情速览（X 提及推文 + AI 分析，独立计费）",
       sentLoading: "⏳ TGTC 舆情分析中…",
       sentErr404: "❌ 舆情服务未就绪（后端端点未部署/未刷新），请稍后再试",
       sentErr429: "🚫 调用次数不足（舆情每次 10 次），请先充值",
       sentErrOther: "❌ 舆情分析失败，请稍后重试",
-      sentSummary: "AI 分析",
+      sentSummary: "TGTC舆情分析（基于X平台已有推文分析，DYOR）",
       sentTweets: "提及推文",
       sentMaxViews: "最高阅读",
       sentTotalViews: "总阅读",
       sentTop: "高阅读推文",
+      sentLink: "查看原文",
       sentSelf: "热度评级",
       loading: "⏳ TGTC 评估中…",
       errNoKey: "⚠️ 请先点击浏览器工具栏 TGTC 图标，填入 API Key",
@@ -57,18 +59,20 @@
     },
     en: {
       badgeTitle: "TGTC evaluation (BSC on-chain)",
-      badgeText: "CA Data",
+      badgeText: "⚡ CA Data",
       sentimentBtn: "🧵 Sentiment",
+      sentTitle: "TGTC Sentiment",
       sentimentTitle: "CA sentiment scan (X mentions + AI analysis, billed separately)",
       sentLoading: "⏳ TGTC analyzing…",
       sentErr404: "❌ Sentiment service not ready (backend endpoint not deployed), retry later",
       sentErr429: "🚫 Not enough credits (sentiment costs 10 per scan), recharge first",
       sentErrOther: "❌ Sentiment analysis failed, retry later",
-      sentSummary: "AI Analysis",
+      sentSummary: "TGTC Sentiment Analysis (based on existing X posts, DYOR)",
       sentTweets: "Mentions",
       sentMaxViews: "Max views",
       sentTotalViews: "Total views",
       sentTop: "Top tweets",
+      sentLink: "View original",
       sentSelf: "Heat level",
       loading: "⏳ TGTC evaluating…",
       errNoKey: "⚠️ Click the TGTC icon and enter your API Key first",
@@ -109,6 +113,10 @@
   const CHANGELOG_URL = LANG === "zh"
     ? "https://www.tgtcbot.com/changelog.zh.html"
     : "https://www.tgtcbot.com/changelog.html";
+  // TGTC 官网首页（中英文按语言切换）
+  const SITE_URL = LANG === "zh"
+    ? "https://www.tgtcbot.com/index.zh.html"
+    : "https://www.tgtcbot.com/index.html";
 
   const CASHTAG_RE = /\$([A-Za-z0-9]{1,12})/g;
 
@@ -232,6 +240,14 @@
 
   // 舆情速览卡片（纯推文版）：热度评级色块（AI 文本解析）+ AI 分析 + 高阅读推文列表
   // 所有动态文本用 textContent 注入，防 XSS
+  function cleanTweetText(t) {
+    // 去掉 CA（0x+40位）与尾部链接（完整或残缺），仅保留文字内容
+    return (t || "")
+      .replace(/\b0x[a-fA-F0-9]{40}\b/g, " ")
+      .replace(/(?:https?:\/\/|www\.)\S*$/i, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
   function renderSentiment(card, d) {
     const m = (d.ai_text || "").match(/热度评级[:：]\s*(高|中|低)/);
     const tier = m ? (m[1] === "高" ? "ok" : m[1] === "中" ? "warn" : "bad") : "unknown";
@@ -239,12 +255,12 @@
     const label = m ? m[1] : "?";
     card.innerHTML = `
       <div class="tgtc-x-head">
+        <b>${T.sentTitle}</b>
         <span class="tgtc-x-tier ${tier}">${icon} ${T.sentSelf} ${label}</span>
-        <b>${T.sentimentBtn.replace("🧵 ", "")}</b>
         <span>${(d.ca || "").slice(0, 10)}… · BSC</span>
         <button class="tgtc-x-close" title="${T.close}">×</button>
       </div>
-      <div class="tgtc-x-sec">${T.sentSummary}</div>
+      <div class="tgtc-x-sec"><a class="tgtc-x-sec-link" href="${SITE_URL}" target="_blank" rel="noopener">${T.sentSummary}</a></div>
       <div class="tgtc-x-sentiment" id="sentText"></div>
       <div class="tgtc-x-grid">
         <div><span>${T.sentTweets}</span><b>${d.tweets_count ?? "—"}</b></div>
@@ -252,11 +268,7 @@
         <div><span>${T.sentTotalViews}</span><b>${(d.total_views ?? 0).toLocaleString()}</b></div>
       </div>
       <div class="tgtc-x-sec">${T.sentTop}</div>
-      <div id="sentList" class="tgtc-x-tlist"></div>
-      <div class="tgtc-x-foot">
-        <span class="tgtc-x-more">${T.sentimentTitle}</span>
-        <a href="https://bscscan.com/token/${d.ca || ""}" target="_blank" rel="noopener">${T.bscscan}</a>
-      </div>`;
+      <div id="sentList" class="tgtc-x-tlist"></div>`;
     card.querySelector("#sentText").textContent = d.ai_text || "";
     const list = card.querySelector("#sentList");
     (d.top_tweets || []).forEach((t, i) => {
@@ -265,8 +277,17 @@
       const h = document.createElement("b");
       h.textContent = "#" + (i + 1) + " · " + (t.views || 0).toLocaleString() + " views · " + (t.likes || 0) + " likes";
       const p = document.createElement("p");
-      p.textContent = t.text || "";
+      p.textContent = cleanTweetText(t.text);
       item.append(h, p);
+      if (t.url) {
+        const a = document.createElement("a");
+        a.className = "tgtc-x-tlink";
+        a.href = t.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = T.sentLink;
+        item.append(a);
+      }
       list.appendChild(item);
     });
     card.querySelector(".tgtc-x-close").addEventListener("click", closeCard);
@@ -275,7 +296,7 @@
   async function openSentiment(anchor, ca) {
     closeCard();
     const card = document.createElement("div");
-    card.className = "tgtc-x-card";
+    card.className = "tgtc-x-card tgtc-x-card-sent";
     card.innerHTML = `<div class="tgtc-x-load">${T.sentLoading}</div>`;
     appendCard(anchor, card);
     try {
@@ -495,6 +516,7 @@
         <button class="tgtc-x-copy">${T.copyCa}</button>
         <a href="https://bscscan.com/token/${d.ca || cas[ctx.idx]}" target="_blank" rel="noopener">BscScan</a>
         <a href="https://dexscreener.com/bsc/${d.ca || cas[ctx.idx]}" target="_blank" rel="noopener">DexScreener</a>
+        <a href="${CHANGELOG_URL}" target="_blank" rel="noopener">${T.tgtc}</a>
         <button class="tgtc-x-toggle">${T.expand}</button>
       </div>
       <div class="tgtc-x-detail">
@@ -534,11 +556,10 @@
           : `<span class="tgtc-x-tag ok">${T.okNone}</span>`}
         ${okTags.map((t) => `<span class="tgtc-x-tag ok">${t}</span>`).join("")}
       </div>
+      ${cas.length > 1 ? `
       <div class="tgtc-x-foot">
-        ${cas.length > 1 ? `<span class="tgtc-x-more">${T.moreCa.replace("{n}", cas.length)}</span>` : ""}
-        <a href="https://bscscan.com/token/${d.ca || cas[ctx.idx]}" target="_blank" rel="noopener">${T.bscscan}</a>
-        <a href="${CHANGELOG_URL}" target="_blank" rel="noopener">${T.tgtc}</a>
-      </div>
+        <span class="tgtc-x-more">${T.moreCa.replace("{n}", cas.length)}</span>
+      </div>` : ""}
       </div>`;
     card.querySelector(".tgtc-x-close").addEventListener("click", closeCard);
     const prev = card.querySelector(".tgtc-x-ca-prev");

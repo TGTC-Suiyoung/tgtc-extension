@@ -5,6 +5,34 @@ Update history for **TGTC — BSC Token Lookup**. All versions below are loaded 
 
 ---
 
+## UI polish — 2026-10-03
+- Badge colors (green/orange), symbols & spacing, card width & font tuning, metric-row spacing,
+  footer dedup & action-row reshuffle, sentiment card layout and title rename
+  (covers v1.5.4, v1.6.3–v1.6.5, v1.6.7–v1.6.13, v1.6.16, v1.6.18–v1.6.19).
+
+## v1.6.17 — 2026-10-03 · Sentiment title links to official site
+- The top label is now a blue hyperlink: index.zh.html for zh browsers, index.html otherwise.
+
+## v1.6.15 — 2026-10-03 · Original tweet links
+- Each top tweet shows clean text plus a "View original" link to the X post (auto-hidden if unavailable).
+
+## v1.6.14 — 2026-10-03 · Tweet cleanup
+- Sentiment tweet rendering strips the CA (0x…40 hex) and trailing URLs (incl. broken fragments).
+
+## v1.6.6 — 2026-10-03 · URL-safe truncation
+- Tweet truncation never cuts a URL — partial URL tails are dropped.
+
+## v1.6.2 — 2026-10-03 · Sentiment error classification
+- 401→add key, 404→not a token, 429→out of credits, others→analysis failed.
+
+## v1.6.1 — 2026-10-03 · Pure tweet analysis
+- Search X mentions by CA → top 10 by views → AI analysis (heat rating / summary / key signals).
+  Billed 10 credits; 10-min cache hits are free.
+
+## v1.6.0 — 2026-10-03 · CA Sentiment Scan (new)
+- New "🧵 Sentiment" button next to the badge: one click builds an X sentiment card for the CA
+  (AI summary + top-view tweets), billed separately.
+
 ## v1.5.3 — 2026-10-03 · Check CA + official-account deep profile
 
 - **Badge text** changed to **⚡ Check CA** (Chinese: ⚡ 查CA) — clearer than a bare ⚡.
@@ -58,6 +86,31 @@ Update history for **TGTC — BSC Token Lookup**. All versions below are loaded 
 
 **TGTC — BSC Token Lookup** 的历史版本。本地加载方式：
 `chrome://extensions` → 开发者模式 → 加载已解压的扩展程序。
+
+## 优化UI界面（2026-10-03）
+- 徽章配色绿橙、符号与间距调整、卡片宽度与字号打磨、指标行间距收紧、底部去重与操作行重排、
+  舆情卡排版优化与标题改名（覆盖 v1.5.4、v1.6.3–v1.6.5、v1.6.7–v1.6.13、v1.6.16、v1.6.18–v1.6.19）
+
+## v1.6.17（2026-10-03）· 舆情分析标题挂官网链接
+- 「TGTC舆情分析（基于X平台已有推文分析，DYOR）」变为蓝色超链接：中文环境跳 index.zh.html、英文跳 index.html。
+
+## v1.6.15（2026-10-03）· 高阅读推文挂原文链接
+- 每条高阅读推文正文去 CA、去链接，底部新增「查看原文」链接（跳转 X 原文页，无链接自动隐藏）。
+
+## v1.6.14（2026-10-03）· 推文净化
+- 舆情卡推文渲染去掉 CA（0x+40位）与尾部链接（含残缺残段），只显示文字内容。
+
+## v1.6.6（2026-10-03）· 网址截断保护
+- 推文文本截断时若切进 URL 则去掉残缺尾巴——文字可截断、网址不截断。
+
+## v1.6.2（2026-10-03）· 舆情错误提示分类
+- 舆情失败按状态分类提示：401→填 Key、404→非代币或查询失败、429→次数不足、其他→分析失败。
+
+## v1.6.1（2026-10-03）· 舆情改纯推文版
+- 按 CA 搜索 X 推文 → 阅读量 top10 → AI 分析（热度评级/摘要/关键信号）；独立计费 10 次，10 分钟缓存命中不扣次。
+
+## v1.6.0（2026-10-03）· CA 舆情速览（新功能）
+- 徽章旁新增「🧵 CA舆情」按钮：一键生成该 CA 的 X 平台舆情速览卡（AI 汇总 + 高阅读推文），独立计费。
 
 ## v1.5.3（2026-10-03）· 查CA + 官方号深层画像
 
