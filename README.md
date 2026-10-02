@@ -64,6 +64,10 @@ single click — no page switches, no copy-paste.
 4. Click **Load unpacked** → select the folder containing `manifest.json`.
 5. Pin the extension from the puzzle icon.
 
+> 💡 **After every update**: open `chrome://extensions` → find TGTC → click the **refresh**
+> (reload) button, then refresh your X page. No re-install needed — the new version takes
+> effect immediately.
+
 ## 🧭 Usage
 
 1. Click the TGTC icon in the toolbar → paste your **API Key** (saved automatically).
@@ -153,6 +157,9 @@ provided by tgtcbot.com.
 2. Chrome 打开 `chrome://extensions` → 右上角开启**开发者模式**
 3. 点**加载已解压的扩展程序** → 选择含 `manifest.json` 的文件夹
 4. 工具栏拼图图标里固定 TGTC
+
+> 💡 **每次更新后**：打开 `chrome://extensions` → TGTC 卡片上点**刷新**按钮（重新加载），
+> 再刷新 X 页面即可生效，无需重新安装。
 
 ### 使用
 
