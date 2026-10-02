@@ -9,7 +9,7 @@
   const T = {
     zh: {
       badgeTitle: "TGTC 评估（BSC 链上数据）",
-      badgeText: "⚡ 查CA",
+      badgeText: "CA数据",
       sentimentBtn: "🧵 CA舆情",
       sentimentTitle: "CA 舆情速览（X 提及推文 + AI 分析，独立计费）",
       sentLoading: "⏳ TGTC 舆情分析中…",
@@ -57,7 +57,7 @@
     },
     en: {
       badgeTitle: "TGTC evaluation (BSC on-chain)",
-      badgeText: "⚡ Check CA",
+      badgeText: "CA Data",
       sentimentBtn: "🧵 Sentiment",
       sentimentTitle: "CA sentiment scan (X mentions + AI analysis, billed separately)",
       sentLoading: "⏳ TGTC analyzing…",
