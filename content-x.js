@@ -13,6 +13,9 @@
       sentimentBtn: "🧵 CA舆情",
       sentimentTitle: "CA 舆情速览（X 提及推文 + AI 分析，独立计费）",
       sentLoading: "⏳ TGTC 舆情分析中…",
+      sentErr404: "❌ 舆情服务未就绪（后端端点未部署/未刷新），请稍后再试",
+      sentErr429: "🚫 调用次数不足（舆情每次 10 次），请先充值",
+      sentErrOther: "❌ 舆情分析失败，请稍后重试",
       sentSummary: "AI 分析",
       sentTweets: "提及推文",
       sentMaxViews: "最高阅读",
@@ -58,6 +61,9 @@
       sentimentBtn: "🧵 Sentiment",
       sentimentTitle: "CA sentiment scan (X mentions + AI analysis, billed separately)",
       sentLoading: "⏳ TGTC analyzing…",
+      sentErr404: "❌ Sentiment service not ready (backend endpoint not deployed), retry later",
+      sentErr429: "🚫 Not enough credits (sentiment costs 10 per scan), recharge first",
+      sentErrOther: "❌ Sentiment analysis failed, retry later",
       sentSummary: "AI Analysis",
       sentTweets: "Mentions",
       sentMaxViews: "Max views",
@@ -217,9 +223,9 @@
   function fetchSentimentViaWorker(ca) {
     return new Promise((resolve) => {
       chrome.runtime.sendMessage({ type: "tgtc_sentiment", ca }, (resp) => {
-        if (chrome.runtime.lastError) { resolve(null); return; }
-        if (!resp || resp.err === "NO_KEY") { resolve("NO_KEY"); return; }
-        resolve(resp && resp.ok ? resp.data : null);
+        if (chrome.runtime.lastError) { resolve({ ok: false, status: 0 }); return; }
+        if (!resp || resp.err === "NO_KEY") { resolve({ ok: false, status: 401 }); return; }
+        resolve(resp || { ok: false, status: 0 });
       });
     });
   }
@@ -273,16 +279,24 @@
     card.innerHTML = `<div class="tgtc-x-load">${T.sentLoading}</div>`;
     appendCard(anchor, card);
     try {
-      const d = await fetchSentimentViaWorker(ca);
-      if (d === "NO_KEY") {
+      const r = await fetchSentimentViaWorker(ca);
+      if (!r || r.status === 401) {
         card.innerHTML = `<div class="tgtc-x-err">${T.errNoKey}</div>`;
         return;
       }
-      if (!d) {
-        card.innerHTML = `<div class="tgtc-x-err">${T.errNotFound}</div>`;
+      if (r.status === 404) {
+        card.innerHTML = `<div class="tgtc-x-err">${T.sentErr404}</div>`;
         return;
       }
-      renderSentiment(card, d);
+      if (r.status === 429) {
+        card.innerHTML = `<div class="tgtc-x-err">${T.sentErr429}</div>`;
+        return;
+      }
+      if (!r.ok || !r.data) {
+        card.innerHTML = `<div class="tgtc-x-err">${T.sentErrOther}</div>`;
+        return;
+      }
+      renderSentiment(card, r.data);
     } catch (e) {
       card.innerHTML = `<div class="tgtc-x-err">${T.errNet}${e.message || e}</div>`;
     }
