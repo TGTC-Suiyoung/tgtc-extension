@@ -42,6 +42,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   $("how").innerHTML = T.how;
   $("linkGet").textContent = T.linkGet;
   $("linkMore").textContent = T.linkMore;
+  $("linkMore").href = LANG === "zh"
+    ? "https://www.tgtcbot.com/changelog.zh.html"
+    : "https://www.tgtcbot.com/changelog.html";
   const { tgtc_key: key } = await chrome.storage.local.get(["tgtc_key"]);
   if (key) $("key").value = key;
   refreshStatus();

@@ -61,6 +61,11 @@
     },
   }[LANG];
 
+  // 站点详情页链接（开源后国际用户点开英文页）
+  const CHANGELOG_URL = LANG === "zh"
+    ? "https://www.tgtcbot.com/changelog.zh.html"
+    : "https://www.tgtcbot.com/changelog.html";
+
   function extractCa(article) {
     const found = [];
     const roots = article.querySelectorAll('[data-testid="tweetText"]');
@@ -310,7 +315,7 @@
       <div class="tgtc-x-foot">
         ${cas.length > 1 ? `<span class="tgtc-x-more">${T.moreCa.replace("{n}", cas.length)}</span>` : ""}
         <a href="https://bscscan.com/token/${d.ca || cas[0]}" target="_blank" rel="noopener">${T.bscscan}</a>
-        <a href="https://www.tgtcbot.com/changelog.zh.html" target="_blank" rel="noopener">${T.tgtc}</a>
+        <a href="${CHANGELOG_URL}" target="_blank" rel="noopener">${T.tgtc}</a>
       </div>`;
     card.querySelector(".tgtc-x-close").addEventListener("click", closeCard);
   }
