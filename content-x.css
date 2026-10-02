@@ -97,6 +97,14 @@
   background:rgba(255,255,255,.03);border:1px solid var(--line);
   border-radius:8px;padding:8px 10px;max-height:220px;overflow-y:auto;
 }
+.tgtc-x-tlist{display:flex;flex-direction:column;gap:6px}
+.tgtc-x-titem{
+  font-size:12px;background:rgba(255,255,255,.02);border:1px solid var(--line);
+  border-radius:8px;padding:6px 9px;
+}
+.tgtc-x-titem b{font-size:11px;color:var(--cyan);font-variant-numeric:tabular-nums}
+.tgtc-x-titem p{font-size:11.5px;color:#c3cbd8;margin-top:2px;line-height:1.55;
+  word-break:break-word;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .tgtc-x-more{color:#8b949e;margin-right:auto}
 .tgtc-x-load,.tgtc-x-err{color:#8b949e}
 .tgtc-x-err{color:#e5534b}

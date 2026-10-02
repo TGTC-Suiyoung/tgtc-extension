@@ -11,12 +11,14 @@
       badgeTitle: "TGTC 评估（BSC 链上数据）",
       badgeText: "⚡ 查CA",
       sentimentBtn: "🧵 CA舆情",
-      sentimentTitle: "CA 舆情速览（链上+推文+动向+AI 汇总，独立计费）",
+      sentimentTitle: "CA 舆情速览（X 提及推文 + AI 分析，独立计费）",
       sentLoading: "⏳ TGTC 舆情分析中…",
-      sentSummary: "AI 汇总",
+      sentSummary: "AI 分析",
       sentTweets: "提及推文",
-      sentHandle: "官方号",
-      sentSelf: "自洽度",
+      sentMaxViews: "最高阅读",
+      sentTotalViews: "总阅读",
+      sentTop: "高阅读推文",
+      sentSelf: "热度评级",
       loading: "⏳ TGTC 评估中…",
       errNoKey: "⚠️ 请先点击浏览器工具栏 TGTC 图标，填入 API Key",
       errNotFound: "❌ 非代币或查询失败（可能是钱包地址）",
@@ -54,12 +56,14 @@
       badgeTitle: "TGTC evaluation (BSC on-chain)",
       badgeText: "⚡ Check CA",
       sentimentBtn: "🧵 Sentiment",
-      sentimentTitle: "CA sentiment scan (on-chain + tweets + moves + AI summary, billed separately)",
+      sentimentTitle: "CA sentiment scan (X mentions + AI analysis, billed separately)",
       sentLoading: "⏳ TGTC analyzing…",
-      sentSummary: "AI Summary",
+      sentSummary: "AI Analysis",
       sentTweets: "Mentions",
-      sentHandle: "Official",
-      sentSelf: "Consistency",
+      sentMaxViews: "Max views",
+      sentTotalViews: "Total views",
+      sentTop: "Top tweets",
+      sentSelf: "Heat level",
       loading: "⏳ TGTC evaluating…",
       errNoKey: "⚠️ Click the TGTC icon and enter your API Key first",
       errNotFound: "❌ Not a token or query failed (maybe a wallet address)",
@@ -220,32 +224,45 @@
     });
   }
 
-  // 舆情速览卡片：自洽度色块（AI 文本解析）+ 关键数字 + AI 汇总（textContent 防 XSS）
+  // 舆情速览卡片（纯推文版）：热度评级色块（AI 文本解析）+ AI 分析 + 高阅读推文列表
+  // 所有动态文本用 textContent 注入，防 XSS
   function renderSentiment(card, d) {
-    const m = (d.ai_text || "").match(/自洽度[:：]\s*(高|中|低)/);
+    const m = (d.ai_text || "").match(/热度评级[:：]\s*(高|中|低)/);
     const tier = m ? (m[1] === "高" ? "ok" : m[1] === "中" ? "warn" : "bad") : "unknown";
     const icon = tier === "ok" ? "✓" : tier === "warn" ? "⚠" : tier === "bad" ? "✗" : "◇";
     const label = m ? m[1] : "?";
     card.innerHTML = `
       <div class="tgtc-x-head">
         <span class="tgtc-x-tier ${tier}">${icon} ${T.sentSelf} ${label}</span>
-        <b>${d.symbol || "—"}</b>
-        <span>${T.sentimentBtn.replace("🧵 ", "")} · BSC</span>
+        <b>${T.sentimentBtn.replace("🧵 ", "")}</b>
+        <span>${(d.ca || "").slice(0, 10)}… · BSC</span>
         <button class="tgtc-x-close" title="${T.close}">×</button>
       </div>
       <div class="tgtc-x-sec">${T.sentSummary}</div>
       <div class="tgtc-x-sentiment" id="sentText"></div>
       <div class="tgtc-x-grid">
         <div><span>${T.sentTweets}</span><b>${d.tweets_count ?? "—"}</b></div>
-        <div><span>${T.sentHandle}</span><b>${d.account_handle || "—"}</b></div>
-        <div><span>${T.smart} ${T.in}</span><b>${(d.moves && d.moves.smart_buy) ?? "—"}</b></div>
-        <div><span>${T.smart} ${T.out}</span><b>${(d.moves && d.moves.smart_sell) ?? "—"}</b></div>
+        <div><span>${T.sentMaxViews}</span><b>${(d.max_views ?? 0).toLocaleString()}</b></div>
+        <div><span>${T.sentTotalViews}</span><b>${(d.total_views ?? 0).toLocaleString()}</b></div>
       </div>
+      <div class="tgtc-x-sec">${T.sentTop}</div>
+      <div id="sentList" class="tgtc-x-tlist"></div>
       <div class="tgtc-x-foot">
         <span class="tgtc-x-more">${T.sentimentTitle}</span>
         <a href="https://bscscan.com/token/${d.ca || ""}" target="_blank" rel="noopener">${T.bscscan}</a>
       </div>`;
     card.querySelector("#sentText").textContent = d.ai_text || "";
+    const list = card.querySelector("#sentList");
+    (d.top_tweets || []).forEach((t, i) => {
+      const item = document.createElement("div");
+      item.className = "tgtc-x-titem";
+      const h = document.createElement("b");
+      h.textContent = "#" + (i + 1) + " · " + (t.views || 0).toLocaleString() + " views · " + (t.likes || 0) + " likes";
+      const p = document.createElement("p");
+      p.textContent = t.text || "";
+      item.append(h, p);
+      list.appendChild(item);
+    });
     card.querySelector(".tgtc-x-close").addEventListener("click", closeCard);
   }
 
