@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="apple-touch-icon.png" width="96" alt="TGTC">
+</p>
+
 # ⚡ TGTC — BSC Token Lookup
 
 **One-click on-chain evaluation for BSC tokens, right in your X (Twitter) feed.**
@@ -24,7 +28,9 @@ on-chain assessment card with a single click — no page switches, no copy-paste
 
 ## 📸 Screenshots
 
-> TODO: add screenshots of the badge and the assessment card.
+![⚡ badge on a tweet](screenshots/badge.png)
+
+![Assessment card](screenshots/card.png)
 
 ## 🚀 Install (load unpacked)
 
