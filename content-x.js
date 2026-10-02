@@ -10,6 +10,13 @@
     zh: {
       badgeTitle: "TGTC 评估（BSC 链上数据）",
       badgeText: "⚡ 查CA",
+      sentimentBtn: "🧵 CA舆情",
+      sentimentTitle: "CA 舆情速览（链上+推文+动向+AI 汇总，独立计费）",
+      sentLoading: "⏳ TGTC 舆情分析中…",
+      sentSummary: "AI 汇总",
+      sentTweets: "提及推文",
+      sentHandle: "官方号",
+      sentSelf: "自洽度",
       loading: "⏳ TGTC 评估中…",
       errNoKey: "⚠️ 请先点击浏览器工具栏 TGTC 图标，填入 API Key",
       errNotFound: "❌ 非代币或查询失败（可能是钱包地址）",
@@ -46,6 +53,13 @@
     en: {
       badgeTitle: "TGTC evaluation (BSC on-chain)",
       badgeText: "⚡ Check CA",
+      sentimentBtn: "🧵 Sentiment",
+      sentimentTitle: "CA sentiment scan (on-chain + tweets + moves + AI summary, billed separately)",
+      sentLoading: "⏳ TGTC analyzing…",
+      sentSummary: "AI Summary",
+      sentTweets: "Mentions",
+      sentHandle: "Official",
+      sentSelf: "Consistency",
       loading: "⏳ TGTC evaluating…",
       errNoKey: "⚠️ Click the TGTC icon and enter your API Key first",
       errNotFound: "❌ Not a token or query failed (maybe a wallet address)",
@@ -113,6 +127,9 @@
     article.dataset.tgtcDone = "1";
     article.style.position = "relative";
 
+    // 双按钮：⚡ 查CA（评估卡片）+ 🧵 CA舆情（舆情速览，独立计费）
+    const badges = document.createElement("div");
+    badges.className = "tgtc-x-badges";
     const badge = document.createElement("button");
     badge.className = "tgtc-x-badge";
     badge.textContent = T.badgeText;
@@ -123,7 +140,17 @@
       e.stopPropagation();
       openCard(badge, cas, cashtags);
     });
-    article.appendChild(badge);
+    const sentBtn = document.createElement("button");
+    sentBtn.className = "tgtc-x-badge tgtc-x-badge-sent";
+    sentBtn.textContent = T.sentimentBtn;
+    sentBtn.title = T.sentimentTitle;
+    sentBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openSentiment(sentBtn, cas[0]);
+    });
+    badges.append(badge, sentBtn);
+    article.appendChild(badges);
   }
 
   function closeCard() {
@@ -181,6 +208,67 @@
         resolve(resp && resp.ok ? resp.data : null);
       });
     });
+  }
+
+  function fetchSentimentViaWorker(ca) {
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage({ type: "tgtc_sentiment", ca }, (resp) => {
+        if (chrome.runtime.lastError) { resolve(null); return; }
+        if (!resp || resp.err === "NO_KEY") { resolve("NO_KEY"); return; }
+        resolve(resp && resp.ok ? resp.data : null);
+      });
+    });
+  }
+
+  // 舆情速览卡片：自洽度色块（AI 文本解析）+ 关键数字 + AI 汇总（textContent 防 XSS）
+  function renderSentiment(card, d) {
+    const m = (d.ai_text || "").match(/自洽度[:：]\s*(高|中|低)/);
+    const tier = m ? (m[1] === "高" ? "ok" : m[1] === "中" ? "warn" : "bad") : "unknown";
+    const icon = tier === "ok" ? "✓" : tier === "warn" ? "⚠" : tier === "bad" ? "✗" : "◇";
+    const label = m ? m[1] : "?";
+    card.innerHTML = `
+      <div class="tgtc-x-head">
+        <span class="tgtc-x-tier ${tier}">${icon} ${T.sentSelf} ${label}</span>
+        <b>${d.symbol || "—"}</b>
+        <span>${T.sentimentBtn.replace("🧵 ", "")} · BSC</span>
+        <button class="tgtc-x-close" title="${T.close}">×</button>
+      </div>
+      <div class="tgtc-x-sec">${T.sentSummary}</div>
+      <div class="tgtc-x-sentiment" id="sentText"></div>
+      <div class="tgtc-x-grid">
+        <div><span>${T.sentTweets}</span><b>${d.tweets_count ?? "—"}</b></div>
+        <div><span>${T.sentHandle}</span><b>${d.account_handle || "—"}</b></div>
+        <div><span>${T.smart} ${T.in}</span><b>${(d.moves && d.moves.smart_buy) ?? "—"}</b></div>
+        <div><span>${T.smart} ${T.out}</span><b>${(d.moves && d.moves.smart_sell) ?? "—"}</b></div>
+      </div>
+      <div class="tgtc-x-foot">
+        <span class="tgtc-x-more">${T.sentimentTitle}</span>
+        <a href="https://bscscan.com/token/${d.ca || ""}" target="_blank" rel="noopener">${T.bscscan}</a>
+      </div>`;
+    card.querySelector("#sentText").textContent = d.ai_text || "";
+    card.querySelector(".tgtc-x-close").addEventListener("click", closeCard);
+  }
+
+  async function openSentiment(anchor, ca) {
+    closeCard();
+    const card = document.createElement("div");
+    card.className = "tgtc-x-card";
+    card.innerHTML = `<div class="tgtc-x-load">${T.sentLoading}</div>`;
+    appendCard(anchor, card);
+    try {
+      const d = await fetchSentimentViaWorker(ca);
+      if (d === "NO_KEY") {
+        card.innerHTML = `<div class="tgtc-x-err">${T.errNoKey}</div>`;
+        return;
+      }
+      if (!d) {
+        card.innerHTML = `<div class="tgtc-x-err">${T.errNotFound}</div>`;
+        return;
+      }
+      renderSentiment(card, d);
+    } catch (e) {
+      card.innerHTML = `<div class="tgtc-x-err">${T.errNet}${e.message || e}</div>`;
+    }
   }
 
   function fmt(v) {
