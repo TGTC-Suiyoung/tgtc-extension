@@ -9,6 +9,7 @@
   const T = {
     zh: {
       badgeTitle: "TGTC 评估（BSC 链上数据）",
+      badgeText: "⚡ 查",
       loading: "⏳ TGTC 评估中…",
       errNoKey: "⚠️ 请先点击浏览器工具栏 TGTC 图标，填入 API Key",
       errNotFound: "❌ 非代币或查询失败（可能是钱包地址）",
@@ -43,6 +44,7 @@
     },
     en: {
       badgeTitle: "TGTC evaluation (BSC on-chain)",
+      badgeText: "⚡ Check",
       loading: "⏳ TGTC evaluating…",
       errNoKey: "⚠️ Click the TGTC icon and enter your API Key first",
       errNotFound: "❌ Not a token or query failed (maybe a wallet address)",
@@ -111,7 +113,7 @@
 
     const badge = document.createElement("button");
     badge.className = "tgtc-x-badge";
-    badge.textContent = "⚡";
+    badge.textContent = T.badgeText;
     badge.title = T.badgeTitle;
     badge.dataset.cashtags = JSON.stringify(cashtags);
     badge.addEventListener("click", (e) => {
