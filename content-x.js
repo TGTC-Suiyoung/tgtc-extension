@@ -168,7 +168,7 @@
     document.body.appendChild(card);
     const r = anchor.getBoundingClientRect();
     card.style.top = Math.max(8, Math.min(r.bottom + 8, window.innerHeight - 220)) + "px";
-    card.style.left = Math.max(8, Math.min(r.left, window.innerWidth - 350)) + "px";
+    card.style.left = Math.max(8, Math.min(r.left, window.innerWidth - 370)) + "px";
     document.addEventListener("click", onDocClick, true);
   }
 
