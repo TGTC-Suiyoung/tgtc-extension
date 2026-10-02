@@ -9,7 +9,7 @@
   const T = {
     zh: {
       badgeTitle: "TGTC 评估（BSC 链上数据）",
-      badgeText: "⚡ 查",
+      badgeText: "⚡ 查CA",
       loading: "⏳ TGTC 评估中…",
       errNoKey: "⚠️ 请先点击浏览器工具栏 TGTC 图标，填入 API Key",
       errNotFound: "❌ 非代币或查询失败（可能是钱包地址）",
@@ -22,6 +22,7 @@
       padPre: "⏳ ", padLive: "🚀 ", presale: "预售 ", live: "已发射",
       secMarket: "行情", secChain: "链上", secMoves: "动向", secSafety: "安全",
       secCore: "核心安全", lpBurned: "LP 烧毁", honeypotLabel: "蜜罐", mintLabel: "Mint",
+      officialSec: "官方号画像", officialRename: "改名次数", officialDel: "删帖数", officialCreate: "发币数",
       mcap: "市值", liq: "流动性", vol24: "24h 成交", holders: "持有人",
       age: "上线", bsr: "买卖比", ath: "距高点", swaps: "换手",
       vol1h: "1h 量", supply: "供应",
@@ -44,7 +45,7 @@
     },
     en: {
       badgeTitle: "TGTC evaluation (BSC on-chain)",
-      badgeText: "⚡ Check",
+      badgeText: "⚡ Check CA",
       loading: "⏳ TGTC evaluating…",
       errNoKey: "⚠️ Click the TGTC icon and enter your API Key first",
       errNotFound: "❌ Not a token or query failed (maybe a wallet address)",
@@ -57,6 +58,7 @@
       padPre: "⏳ ", padLive: "🚀 ", presale: "presale ", live: "Live",
       secMarket: "Market", secChain: "On-chain", secMoves: "Moves", secSafety: "Safety",
       secCore: "Key Safety", lpBurned: "LP Burned", honeypotLabel: "Honeypot", mintLabel: "Mint",
+      officialSec: "Official account", officialRename: "Username renames", officialDel: "Deleted tweets", officialCreate: "Tokens created",
       mcap: "Mcap", liq: "Liquidity", vol24: "24h Vol", holders: "Holders",
       age: "Age", bsr: "Buy:Sell", ath: "From ATH", swaps: "Swaps",
       vol1h: "1h Vol", supply: "Supply",
@@ -331,6 +333,17 @@
     const mintKnownV = boolOf(d.mint_renounced) !== null || boolOf(d.renounced) !== null;
     const hpTxt = hpV === true ? "✗" : hpV === false ? "✓" : "—";
     const mintTxt = mintRenV ? "✓" : mintKnownV ? "✗" : "—";
+    // 官方号深层画像（改名/删帖/发币历史计数，聚合接口 basic 分类附带）
+    const rn = Number(d.twitter_rename_count || 0);
+    const dt = Number(d.twitter_deleted_tweet_count || 0);
+    const ct = Number(d.twitter_created_token_count || 0);
+    const officialHtml = (rn + dt + ct) > 0 ? `
+      <div class="tgtc-x-sec">${T.officialSec}</div>
+      <div class="tgtc-x-grid">
+        <div><span>${T.officialRename}</span><b>${rn}</b></div>
+        <div><span>${T.officialDel}</span><b>${dt}</b></div>
+        <div><span>${T.officialCreate}</span><b>${ct}</b></div>
+      </div>` : "";
     card.innerHTML = `
       <div class="tgtc-x-head">
         <span class="tgtc-x-tier ${s.tier}">${tierIcon} ${s.label}</span>
@@ -394,6 +407,7 @@
         <div><span>${T.vault}</span><b>${pct(d.vault_ratio)}</b></div>
       </div>
       ${movesHtml}
+      ${officialHtml}
       <div class="tgtc-x-sec">${T.secSafety}</div>
       <div class="tgtc-x-risk">
         ${s.risks.length
