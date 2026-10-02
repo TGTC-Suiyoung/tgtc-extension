@@ -7,25 +7,25 @@ const T = {
   zh: {
     sub: "X 推文中的合约，点一下即评估 · tgtcbot.com",
     keyLabel: "API Key（私聊 @TG_TC_BOT → 我的 API 获取）",
-    how: "<b>怎么用：</b><br>① 填好上方 Key（自动保存）<br>② 打开 <b>x.com</b> 刷推文<br>③ 带 BSC 合约的推文右上角出现 <b>⚡</b><br>④ 点一下 → 原地弹出评估卡片（价格 / 安全 / 聪明钱）",
+    how: "<b>怎么用：</b><br><span class=\"step-no\">①</span> 填好上方 Key（自动保存）<br><span class=\"step-no\">②</span> 打开 <b>x.com</b> 刷推文<br><span class=\"step-no\">③</span> 带 BSC 合约的推文右上角出现 <b>⚡</b><br><span class=\"step-no\">④</span> 点一下 → 原地弹出评估卡片（价格 / 安全 / 聪明钱）",
     linkGet: "获取 Key →",
     linkMore: "更多端点 →",
     ok: "✓ Key 已保存 —— X 页面上 ⚡ 已可用",
     no: "⚙️ 未填写 Key —— X 页面上 ⚡ 将不可用",
-    statScan: "📊 今日扫描 {n}",
-    statDanger: "🚨 命中危险 {n}",
+    statScan: "今日扫描 {n}",
+    statDanger: "命中危险 {n}",
     board: "打开看板 →",
   },
   en: {
     sub: "BSC contracts in tweets, one click to evaluate · tgtcbot.com",
     keyLabel: "API Key (DM @TG_TC_BOT → My API)",
-    how: "<b>How to use:</b><br>① Enter your Key above (auto-saved)<br>② Open <b>x.com</b> and scroll<br>③ Tweets with a BSC contract show a <b>⚡</b> badge<br>④ Click it → the assessment card pops up (price / safety / smart money)",
+    how: "<b>How to use:</b><br><span class=\"step-no\">①</span> Enter your Key above (auto-saved)<br><span class=\"step-no\">②</span> Open <b>x.com</b> and scroll<br><span class=\"step-no\">③</span> Tweets with a BSC contract show a <b>⚡</b> badge<br><span class=\"step-no\">④</span> Click it → the assessment card pops up (price / safety / smart money)",
     linkGet: "Get a Key →",
     linkMore: "More endpoints →",
     ok: "✓ Key saved — ⚡ is ready on X",
     no: "⚙️ No key yet — ⚡ won't work on X",
-    statScan: "📊 Scanned today {n}",
-    statDanger: "🚨 Flagged {n}",
+    statScan: "Scanned today {n}",
+    statDanger: "Flagged {n}",
     board: "Dashboard →",
   },
 }[LANG];
@@ -56,8 +56,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const { tgtc_scan_stats: st } = await chrome.storage.local.get(["tgtc_scan_stats"]);
     const today = new Date().toISOString().slice(0, 10);
     const cur = (st && st.date === today) ? st : { scanned: 0, danger: 0 };
-    $("statScan").textContent = T.statScan.replace("{n}", cur.scanned || 0);
-    $("statDanger").textContent = T.statDanger.replace("{n}", cur.danger || 0);
+    $("statScan").innerHTML = T.statScan.replace("{n}", "<b>" + (cur.scanned || 0) + "</b>");
+    $("statDanger").innerHTML = T.statDanger.replace("{n}", "<b>" + (cur.danger || 0) + "</b>");
     $("statBoard").textContent = T.board;
   } catch (e) { /* 统计展示失败不影响主流程 */ }
   const { tgtc_key: key } = await chrome.storage.local.get(["tgtc_key"]);

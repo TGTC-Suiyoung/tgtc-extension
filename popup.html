@@ -3,49 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  :root{--bg:#0d1117;--line:#21262d;--fg:#e6edf3;--mut:#8b949e;--cyan:#22d3ee;--green:#3fb682}
+  :root{--bg:#0d1117;--line:#21262d;--fg:#e6edf3;--mut:#8b949e;--cyan:#22d3ee;--green:#3fb682;--red:#f85149}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{width:300px;background:var(--bg);color:var(--fg);font:16px/1.5 -apple-system,"Segoe UI",sans-serif;padding:16px}
-  h1{font-size:18px;font-weight:700;margin-bottom:2px}
-  .sub{color:var(--mut);font-size:14px;margin-bottom:14px}
-  label{display:block;color:var(--mut);font-size:14px;margin-bottom:5px}
+  body{width:300px;background:var(--bg);color:var(--fg);font:14px/1.6 -apple-system,"Segoe UI",sans-serif;padding:14px}
+  .brand{padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:12px}
+  h1{
+    font-size:16px;font-weight:800;margin-bottom:2px;
+    background:linear-gradient(135deg,#22d3ee,#3b82f6);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .sub{color:var(--mut);font-size:11.5px}
+  .panel{
+    background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;
+    padding:10px;margin-bottom:10px;
+  }
+  .sec-label{color:var(--mut);font-size:11px;letter-spacing:.4px;margin-bottom:6px;text-transform:uppercase}
   input{
     width:100%;background:#0a0d12;border:1px solid var(--line);border-radius:8px;
-    color:var(--fg);padding:8px 10px;font-size:15.5px;font-family:ui-monospace,Consolas,monospace
+    color:var(--fg);padding:7px 9px;font-size:13px;font-family:ui-monospace,Consolas,monospace
   }
   input:focus{outline:none;border-color:var(--cyan)}
-  .status{font-size:14px;margin-top:7px}
+  .status{font-size:11.5px;margin-top:6px}
   .ok{color:var(--green)}.no{color:var(--mut)}
-  .stats{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:9px;border-top:1px solid var(--line);font-size:12.5px;color:var(--mut)}
-  .stats b{color:var(--fg)}
-  .stats a{margin-left:auto;color:var(--cyan);text-decoration:none}
-  .stats a:hover{text-decoration:underline}
-  .how{color:var(--mut);font-size:14.5px;margin-top:16px;line-height:1.7}
+  .stats-panel{display:flex;flex-wrap:wrap;gap:8px;padding:10px}
+  .stat-box{
+    flex:1 1 40%;min-width:110px;background:rgba(255,255,255,.03);
+    border:1px solid var(--line);border-radius:8px;padding:6px 8px;
+    font-size:11px;color:var(--mut);text-align:center;line-height:1.4;
+  }
+  .stat-box b{display:block;font-size:17px;color:var(--fg);font-variant-numeric:tabular-nums}
+  .stat-box.danger b{color:var(--red)}
+  .stat-board{flex-basis:100%;text-align:center;color:var(--cyan);font-size:11.5px;text-decoration:none;padding-top:2px}
+  .stat-board:hover{text-decoration:underline}
+  .how{color:var(--mut);font-size:12px;line-height:1.9}
   .how b{color:var(--fg)}
+  .how .step-no{color:var(--cyan);font-weight:700}
   a{color:var(--cyan);text-decoration:none}
-  .link{margin-top:12px;font-size:14.5px;display:flex;justify-content:space-between}
+  .link{margin-top:12px;font-size:12.5px;display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid var(--line)}
+  .link a{font-weight:600}
+  .link a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
-  <h1>⚡ TGTC — BSC Token Lookup</h1>
-  <div class="sub" id="sub">X 推文中的合约，点一下即评估 · tgtcbot.com</div>
-
-  <label id="keyLabel">API Key（私聊 @TG_TC_BOT → 我的 API 获取）</label>
-  <input id="key" type="password" placeholder="sk_live_..." autocomplete="off">
-  <div id="status" class="status no">⚙️ 未填写 Key —— X 页面上 ⚡ 将不可用</div>
-
-  <div class="stats" id="stats">
-    <span id="statScan">📊 今日扫描 <b>0</b></span>
-    <span id="statDanger">🚨 命中危险 <b>0</b></span>
-    <a id="statBoard" href="https://www.tgtcbot.com" target="_blank">打开看板 →</a>
+  <div class="brand">
+    <h1>⚡ TGTC — BSC Token Lookup</h1>
+    <div class="sub" id="sub">X 推文中的合约，点一下即评估 · tgtcbot.com</div>
   </div>
 
-  <div class="how" id="how">
-    <b>怎么用：</b><br>
-    ① 填好上方 Key（自动保存）<br>
-    ② 打开 <b>x.com</b> 刷推文<br>
-    ③ 带 BSC 合约的推文右上角出现 <b>⚡</b><br>
-    ④ 点一下 → 原地弹出评估卡片（价格 / 安全 / 聪明钱）
+  <div class="panel">
+    <div class="sec-label" id="keyLabel">API Key</div>
+    <input id="key" type="password" placeholder="sk_live_..." autocomplete="off">
+    <div id="status" class="status no">⚙️ 未填写 Key —— X 页面上 ⚡ 将不可用</div>
+  </div>
+
+  <div class="panel stats-panel" id="stats">
+    <div class="stat-box"><span id="statScan"></span></div>
+    <div class="stat-box danger"><span id="statDanger"></span></div>
+    <a id="statBoard" class="stat-board" href="https://www.tgtcbot.com" target="_blank"></a>
+  </div>
+
+  <div class="panel">
+    <div class="how" id="how">
+      <b>怎么用：</b><br>
+      <span class="step-no">①</span> 填好上方 Key（自动保存）<br>
+      <span class="step-no">②</span> 打开 <b>x.com</b> 刷推文<br>
+      <span class="step-no">③</span> 带 BSC 合约的推文右上角出现 <b>⚡</b><br>
+      <span class="step-no">④</span> 点一下 → 原地弹出评估卡片（价格 / 安全 / 聪明钱）
+    </div>
   </div>
 
   <div class="link">
