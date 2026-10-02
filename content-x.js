@@ -246,7 +246,7 @@
       ? `<div class="tgtc-x-pump">${T.padLive}${pad} · ${T.live}</div>`
       : prog > 0 ? `<div class="tgtc-x-pump">${T.padPre}${pad} · ${T.presale}${(prog * 100).toFixed(0)}%</div>` : "") : "";
     // 聪明钱/KOL 上下车摘要 + 净买入额（traders 类别：钱包地址数，非交易次数）
-    // KOL 来自 token_traders tag='renowned'（GMGN 默认 top 排行不含 kol tag 钱包）
+    // KOL 来自独立过滤的交易者排行（默认 top 排行不含 kol 钱包）
     const tr = d.traders && typeof d.traders === "object" ? d.traders : null;
     const smartNet = Number(tr && tr.smart_net || 0);
     const kolNet = Number(tr && tr.kol_net || 0);
