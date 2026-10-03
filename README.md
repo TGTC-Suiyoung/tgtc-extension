@@ -37,8 +37,10 @@ single click — no page switches, no copy-paste.
 ### 🧵 X sentiment scan (CA舆情)
 
 - One click searches X mentions of the CA, ranks them by views, and builds a sentiment card:
-  - **Data-driven heat rating** (🔴高 / 🟡中 / ⚪低) — decided by thresholds on mention count +
-    views (10+ mentions & 15K+ total views, or a 5K+ top view → 高; 5+/5K+/1.5K+ → 中), **not by AI guesswork**
+  - **Data-driven heat rating** (🔴高 / 🟡中 / ⚪低) — decided by **dual-channel thresholds,
+    taking the higher**: X-tweet channel (10+ mentions & 15K+ total views, or a 5K+ top view → 高;
+    15+ mentions, or 5+ mentions & 5K+/1.5K+ → 中) or on-chain channel (24h volume ≥ $5M, or
+    $5M+ market cap & 3K+ holders → 高; $500K+ volume/mcap or 1K+ holders → 中), **not by AI guesswork**
   - **AI summary** + key signals, based only on the searched tweets
   - **Top tweets** with clean text (CA and links stripped) plus a **View original** link to each X post
 - Clear error messages: missing key / not a token / out of credits are told apart.
@@ -141,7 +143,7 @@ provided by tgtcbot.com.
 
 **🧵 X 舆情扫描（CA舆情）**
 - 一键搜索该 CA 的 X 提及推文 → 按阅读量排序 → 生成舆情卡：
-  - **热度评级由数据阈值硬判定**（提及 ≥10 且总阅读 ≥15K 或单条 ≥5K → 高；≥5/≥5K/≥1.5K → 中；其余低），AI 无权改级
+  - **热度评级由数据阈值双通道硬判定、取高**：推文通道（提及 ≥10 且总阅读 ≥15K 或单条 ≥5K → 高；提及 ≥15 或 ≥5 且总阅读 5K/单条 1.5K → 中）+ 链上通道（24h 成交 ≥$5M 或市值 ≥$5M 且持有人 ≥3K → 高；成交/市值 ≥$500K 或持有人 ≥1K → 中），AI 无权改级
   - **AI 摘要 + 关键信号**（只基于搜索到的推文）
   - **高阅读推文**：正文净化（去 CA、去链接）+ 每条底部「查看原文」直达 X 原帖
 - 失败原因分类提示：没填 Key / 非代币 / 次数不足，一眼分清
