@@ -14,7 +14,7 @@ const T = {
     no: "⚙️ 未填写 Key —— X 页面上 ⚡ 将不可用",
     statScan: "今日扫描 {n}",
     statDanger: "命中危险 {n}",
-    board: "打开看板 →",
+    board: "打开 TGTC BOT 看板 →",
   },
   en: {
     sub: "BSC contracts in tweets, one click to evaluate · tgtcbot.com",
@@ -26,7 +26,7 @@ const T = {
     no: "⚙️ No key yet — ⚡ won't work on X",
     statScan: "Scanned today {n}",
     statDanger: "Flagged {n}",
-    board: "Dashboard →",
+    board: "Open TGTC Bot Dashboard →",
   },
 }[LANG];
 
